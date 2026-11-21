@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Learn real PyTorch through editable CPU experiments in your browser. Train models, trace gradients, and explore attention.">
+  <title>PyTorch Lab</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#lesson">Skip to lesson</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="./" aria-label="PyTorch Lab home"><span class="brand-icon" aria-hidden="true">[ ]</span> PyTorch Lab</a>
+      <nav class="header-links" aria-label="Site">
+        <a href="https://snowch.github.io/labs/">All labs</a>
+        <a href="https://github.com/snowch/pytorch-lab">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow"><span aria-hidden="true"></span> Interactive course</p>
+        <h1>PyTorch Lab</h1>
+        <p>Build intuition for tensors, gradients, and training by editing real PyTorch code in your browser.</p>
+        <a class="hero-action" href="#lesson">Start learning</a>
+        <span class="hero-detail">26 lessons · CPU only</span>
+      </div>
+      <div class="hero-figure" aria-hidden="true">
+        <div class="figure-top"><span class="figure-light"></span><span class="figure-light"></span><span class="figure-light"></span><span class="figure-label">Tensor shapes</span></div>
+        <div class="figure-body">
+          <div class="figure-operand"><div class="matrix matrix-a"><i></i><i></i><i></i><i></i><i></i><i></i></div><code>X · 2 × 3</code></div>
+          <span class="figure-op">@</span>
+          <div class="figure-operand"><div class="matrix matrix-b"><i></i><i></i><i></i><i></i><i></i><i></i></div><code>W · 3 × 2</code></div>
+          <span class="figure-op">=</span>
+          <div class="figure-operand"><div class="matrix matrix-c"><i></i><i></i><i></i><i></i></div><code>Y · 2 × 2</code></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap course-layout">
+    <aside class="sidebar" aria-label="Course">
+      <details class="outline" id="outline" open>
+        <summary>Course contents</summary>
+        <div class="progress-info" id="progress-label">0 of 26 complete</div>
+        <progress id="progress" max="26" value="0" aria-labelledby="progress-label"></progress>
+        <nav id="course-nav" aria-label="Lessons"></nav>
+      </details>
+    </aside>
+    <main id="lesson" tabindex="-1">
+      <section class="lesson-heading" aria-labelledby="lesson-title">
+        <p class="eyebrow" id="module-title"></p>
+        <h2 id="lesson-title">Index and reduce a tensor</h2>
+        <p class="lead" id="lesson-intro"></p>
+      </section>
+      <div id="lesson-body" hidden>
+        <p class="concept" id="concept"></p>
+        <section class="prediction" aria-labelledby="prediction-title">
+          <h3 id="prediction-title">Predict</h3>
+          <p id="predict"></p>
+          <label for="notes" class="sr-only">Your prediction</label>
+          <textarea id="notes" rows="2" placeholder="Write a prediction for this lesson"></textarea>
+          <p class="small" id="storage-status"></p>
+        </section>
+        <section class="workspace" aria-labelledby="editor-title">
+          <div class="workspace-head">
+            <h3 id="editor-title">Python workbench</h3>
+            <span class="runtime-label">CPU · WebAssembly</span>
+          </div>
+          <div class="editor-toolbar">
+            <span id="filename"></span>
+            <button type="button" id="reset">Restore starter</button>
+          </div>
+          <label class="sr-only" for="source">Editable Python code</label>
+          <textarea id="source" spellcheck="false" autocapitalize="off" autocomplete="off"
+            aria-describedby="shortcuts"></textarea>
+          <div class="run-toolbar">
+            <div class="buttons">
+              <button class="primary" type="button" id="run">Run code</button>
+              <button type="button" id="stop" hidden>Stop</button>
+            </div>
+            <span id="shortcuts">Ctrl / ⌘ + Enter to run</span>
+          </div>
+          <div class="output-panel">
+            <div class="output-heading">
+              <h4>Output</h4>
+              <span class="status" id="status" role="status"></span>
+            </div>
+            <pre id="output" tabindex="0"></pre>
+          </div>
+          <div class="download-toolbar">
+            <button type="button" id="download-python">Download Python</button>
+            <button type="button" id="download-notebook">Download notebook</button>
+          </div>
+        </section>
+        <section class="chart-panel" id="chart-panel" aria-labelledby="chart-title" hidden>
+          <h3 id="chart-title">Loss by step</h3>
+          <canvas id="chart" role="img" aria-label="Loss curve. Values are available in the run data below."></canvas>
+          <ul class="legend" id="legend"></ul>
+          <details><summary>Run data</summary><div id="chart-data"></div></details>
+        </section>
+        <section class="practice" aria-labelledby="practice-title">
+          <h3 id="practice-title">Try it</h3>
+          <p id="try-it"></p>
+          <details id="hint-box"><summary>Show a hint</summary><p id="hint"></p></details>
+          <details id="answer-box"><summary>Show the explanation</summary><p id="answer"></p></details>
+          <a id="related" hidden></a>
+        </section>
+        <div class="lesson-footer">
+          <label class="complete"><input id="complete" type="checkbox"> Mark lesson complete</label>
+          <nav class="pager" aria-label="Lesson navigation">
+            <a id="previous">Previous</a>
+            <a id="next">Next lesson</a>
+          </nav>
+        </div>
+      </div>
+      <noscript>
+        <p>Enable JavaScript for the browser workbench, or download the exercises below to run with PyTorch on your computer.</p>
+        <!-- COURSE_OUTLINE -->
+      </noscript>
+    </main>
+  </div>
+
+  <footer class="wrap site-footer">
+    <p>PyTorch runs locally in a browser worker using a downstream WebAssembly build. The first run downloads the runtime.</p>
+    <a href="./notices.txt">Runtime sources and licenses</a>
+  </footer>
+</body>
+</html>
