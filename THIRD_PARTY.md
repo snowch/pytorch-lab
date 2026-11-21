@@ -7,8 +7,9 @@ stages unmodified upstream distributions of the following runtime software.
 - Pyodide 314.0.2, Mozilla Public License 2.0. Source is available at
   https://github.com/pyodide/pyodide/tree/314.0.2. See licenses/pyodide.txt.
   Its distribution also includes CPython under the Python Software Foundation
-  license, https://docs.python.org/3.14/license.html, and bundled components such
-  as Emscripten, https://github.com/emscripten-core/emscripten/blob/5.0.3/LICENSE.
+  license (licenses/cpython.txt, https://docs.python.org/3.14/license.html) and
+  Emscripten under MIT or NCSA (licenses/emscripten.txt,
+  https://github.com/emscripten-core/emscripten/tree/5.0.3).
 - PyTorch, BSD 3-Clause, see licenses/pytorch.txt and
   https://github.com/pytorch/pytorch/tree/cf30153c4c131c8164ee7798e5022d810682e2cb.
   The exact browser wheel is built by PyTorch for Pyodide, an independent project.
