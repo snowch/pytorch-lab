@@ -2,13 +2,19 @@
   "name": "pytorch-lab",
   "private": true,
   "type": "module",
-  "engines": {"node": ">=24"},
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "dev": "node scripts/serve.mjs",
-    "check": "npm run build && node scripts/check.mjs"
+    "check": "npm run build && node scripts/check.mjs",
+    "test:browser": "npm run build && node tests/shared-browser.cjs && node tests/update-browser.cjs"
   },
   "dependencies": {
     "pyodide": "314.0.2"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
   }
 }

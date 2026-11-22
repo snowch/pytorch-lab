@@ -2,7 +2,8 @@ const panel = document.getElementById("chart-panel");
 const canvas = document.getElementById("chart");
 const legend = document.getElementById("legend");
 const data = document.getElementById("chart-data");
-const colors = ["#3e46a9", "#b44332", "#0f7859", "#7951a4", "#315d8c", "#956400"];
+const lightColors = ["#3e46a9", "#b44332", "#0f7859", "#7951a4", "#315d8c", "#956400"];
+const palette=()=>document.documentElement.dataset.theme==='dark'?["#a6b9ff", "#ffb4a5", "#91dbc0", "#d7b8ff", "#93d2fb", "#f0d18b"]:lightColors;
 const prefix = "LAB_CURVE ";
 let current;
 
@@ -21,7 +22,7 @@ export function showCurve(line, axis) {
   } catch {
     return false;
   }
-  if (!Array.isArray(series) || series.length < 1 || series.length > colors.length ||
+  if (!Array.isArray(series) || series.length < 1 || series.length > lightColors.length ||
       !series.every(entry => entry && typeof entry.label === "string" &&
         Array.isArray(entry.values) && entry.values.length > 1 &&
         entry.values.length <= 500 && entry.values.every(Number.isFinite))) return false;
@@ -31,7 +32,7 @@ export function showCurve(line, axis) {
   legend.replaceChildren(...series.map(({ label }, i) => {
     const item = document.createElement("li");
     const swatch = document.createElement("span");
-    swatch.style.background = colors[i];
+    swatch.style.background = palette()[i];
     item.append(swatch, label);
     return item;
   }));
@@ -69,6 +70,7 @@ function draw() {
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
   ctx.scale(pixel, pixel);
+  legend.querySelectorAll("li span").forEach((swatch,i)=>swatch.style.background=palette()[i]);
   const left = 55;
   const right = width - 15;
   const top = 15;
@@ -78,7 +80,7 @@ function draw() {
   const max = Math.max(0, ...points);
   const span = max - min || 1;
   const steps = Math.max(...series.map(entry => entry.values.length)) - 1;
-  ctx.font = "12px system-ui";
+  ctx.font = "13px IBM Plex Sans, sans-serif";
   ctx.textBaseline = "middle";
   ctx.textAlign = "right";
   for (let i = 0; i <= 4; i++) {
@@ -88,7 +90,7 @@ function draw() {
     ctx.moveTo(left, y);
     ctx.lineTo(right, y);
     ctx.stroke();
-    ctx.fillStyle = "#414969";
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--muted").trim()||"#414969";
     ctx.fillText((min + span * (1 - i / 4)).toPrecision(2), left - 7, y);
   }
   ctx.textAlign = "center";
@@ -98,7 +100,7 @@ function draw() {
   ctx.fillText(axis, (left + right) / 2, bottom + 34);
   series.forEach(({ values }, index) => {
     ctx.beginPath();
-    ctx.strokeStyle = colors[index];
+    ctx.strokeStyle = palette()[index];
     ctx.lineWidth = 2.4;
     values.forEach((value, step) => {
       const x = left + step / steps * (right - left);
@@ -112,3 +114,7 @@ function draw() {
 
 if ("ResizeObserver" in window) new ResizeObserver(draw).observe(canvas);
 else window.addEventListener("resize", draw);
+
+export const snapshotCurve=()=>current?JSON.parse(JSON.stringify(current)):null;
+export function restoreCurve(saved){clearCurve();if(saved)showCurve(prefix+JSON.stringify(saved.series),saved.axis);}
+new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});

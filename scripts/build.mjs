@@ -1,8 +1,11 @@
-import { cp, mkdir, readFile, writeFile } from "node:fs/promises";
+import { cp, mkdir, readFile, writeFile, rm } from "node:fs/promises";
 import { lessons, modules } from "../web/course.js";
 import { customWheels, packages, stageRuntime } from "./runtime-assets.mjs";
 
+import {execFileSync} from "node:child_process";
+import {buildOffline} from "./offline.mjs";
 const output = "dist";
+await rm(output,{recursive:true,force:true});
 await mkdir(`${output}/downloads`, { recursive: true });
 await Promise.all([
   cp("web", output, { recursive: true }),
@@ -51,3 +54,5 @@ const page = await readFile("web/index.html", "utf8");
 await writeFile(`${output}/index.html`, page.replace("<!-- COURSE_OUTLINE -->", outline));
 await writeFile(`${output}/runtime-config.js`, `export const packages = ${JSON.stringify(packages)};\nexport const customWheels = ${JSON.stringify(customWheels)};\n`);
 console.log(`Built ${lessons.length} lessons, Python scripts, and notebooks in ${output}/`);
+
+await buildOffline(output,{commit:process.env.COURSE_COMMIT||execFileSync("git",["rev-parse","HEAD"],{encoding:"utf8"}).trim(),date:execFileSync("git",["show","-s","--format=%cs","HEAD"],{encoding:"utf8"}).trim()});
