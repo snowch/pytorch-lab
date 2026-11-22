@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Learn real PyTorch through editable CPU experiments in your browser. Train models, trace gradients, and explore attention.">
   <title>PyTorch Lab</title>
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem("pytorch-lab-theme")||"light"}catch{}</script>
   <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./course-style.css">
+  <link rel="stylesheet" href="./app-status.css">
+  <link rel="stylesheet" href="./runtime-recovery.css">
   <script type="module" src="./app.js"></script>
 </head>
 <body>
@@ -13,9 +17,10 @@
   <header class="site-header">
     <div class="wrap header-inner">
       <a class="brand" href="./" aria-label="PyTorch Lab home"><span class="brand-icon" aria-hidden="true">[ ]</span> PyTorch Lab</a>
-      <nav class="header-links" aria-label="Site">
-        <a href="https://snowch.github.io/labs/">All labs</a>
-        <a href="https://github.com/snowch/pytorch-lab">GitHub</a>
+      <nav class="header-links" aria-label="Site controls">
+        <button id="code-runner-open" type="button" aria-haspopup="dialog">Code runner <span id="runner-summary">Stopped</span></button>
+        <!-- app-status-control -->
+        <button id="theme" type="button">Dark theme</button>
       </nav>
     </div>
   </header>
@@ -23,13 +28,13 @@
   <section class="hero">
     <div class="wrap hero-inner">
       <div class="hero-copy">
-        <p class="eyebrow"><span aria-hidden="true"></span> Interactive course</p>
+        <p class="eyebrow">Tensors, gradients and training</p>
         <h1>PyTorch Lab</h1>
         <p>Build intuition for tensors, gradients, and training by editing real PyTorch code in your browser.</p>
-        <a class="hero-action" href="#lesson">Start learning</a>
+        <p>Start with basic Python. Run real PyTorch on this device’s CPU, then use the notebooks for native CPU or CUDA investigations.</p><a class="hero-action" href="?lesson=tensors">Start the course</a>
         <span class="hero-detail">26 lessons · CPU only</span>
       </div>
-      <div class="hero-figure" aria-hidden="true">
+      <figure class="hero-figure" aria-label="Matrix multiplication: two rows by three columns multiplied by three rows by two columns produces two rows by two columns.">
         <div class="figure-top"><span class="figure-light"></span><span class="figure-light"></span><span class="figure-light"></span><span class="figure-label">Tensor shapes</span></div>
         <div class="figure-body">
           <div class="figure-operand"><div class="matrix matrix-a"><i></i><i></i><i></i><i></i><i></i><i></i></div><code>X · 2 × 3</code></div>
@@ -38,42 +43,44 @@
           <span class="figure-op">=</span>
           <div class="figure-operand"><div class="matrix matrix-c"><i></i><i></i><i></i><i></i></div><code>Y · 2 × 2</code></div>
         </div>
-      </div>
+        <figcaption>Each row of X combines with each column of W to produce one value in Y. The inner dimensions must match.</figcaption>
+      </figure>
     </div>
   </section>
 
   <div class="wrap course-layout">
-    <aside class="sidebar" aria-label="Course">
-      <details class="outline" id="outline" open>
-        <summary>Course contents</summary>
-        <div class="progress-info" id="progress-label">0 of 26 complete</div>
+    <section class="course-navigation" aria-label="Course navigation">
+      <div class="course-row"><button id="course-toggle" type="button" aria-expanded="false" aria-controls="outline">Course lessons <span aria-hidden="true">⌄</span></button><span id="progress-label">0 of 26 complete</span><nav id="breadcrumbs" aria-label="Breadcrumb"></nav></div>
+      <div class="outline" id="outline" hidden>
+        <a href="./" class="course-home">Course overview</a>
         <progress id="progress" max="26" value="0" aria-labelledby="progress-label"></progress>
         <nav id="course-nav" aria-label="Lessons"></nav>
-      </details>
-    </aside>
+      </div>
+    </section>
     <main id="lesson" tabindex="-1">
       <section class="lesson-heading" aria-labelledby="lesson-title">
         <p class="eyebrow" id="module-title"></p>
-        <h2 id="lesson-title">Index and reduce a tensor</h2>
+        <h1 id="lesson-title">Index and reduce a tensor</h1>
         <p class="lead" id="lesson-intro"></p>
       </section>
       <div id="lesson-body" hidden>
         <p class="concept" id="concept"></p>
         <section class="prediction" aria-labelledby="prediction-title">
-          <h3 id="prediction-title">Predict</h3>
+          <h2 id="prediction-title">Predict before you run</h2>
           <p id="predict"></p>
           <label for="notes" class="sr-only">Your prediction</label>
           <textarea id="notes" rows="2" placeholder="Write a prediction for this lesson"></textarea>
           <p class="small" id="storage-status"></p>
         </section>
+        <section class="run-instructions"><h2>Run the experiment</h2><p>The editor contains the complete starter program. Click <strong>Run code</strong> with the code unchanged. Inspect the printed output before trying the edit below.</p></section>
         <section class="workspace" aria-labelledby="editor-title">
           <div class="workspace-head">
-            <h3 id="editor-title">Python workbench</h3>
-            <span class="runtime-label">CPU · WebAssembly</span>
+            <h2 id="editor-title">Python source</h2>
+            <span class="runtime-label">CPU · In this browser</span>
           </div>
           <div class="editor-toolbar">
             <span id="filename"></span>
-            <button type="button" id="reset">Restore starter</button>
+            <details class="editor-tools"><summary>Editor tools</summary><button type="button" id="reset">Restore starter</button><button type="button" id="undo-reset" hidden>Undo restore</button><button type="button" id="download-python">Export .py</button></details>
           </div>
           <label class="sr-only" for="source">Editable Python code</label>
           <textarea id="source" spellcheck="false" autocapitalize="off" autocomplete="off"
@@ -87,13 +94,13 @@
           </div>
           <div class="output-panel">
             <div class="output-heading">
-              <h4>Output</h4>
+              <h3>Console</h3>
               <span class="status" id="status" role="status"></span>
             </div>
             <pre id="output" tabindex="0"></pre>
           </div>
           <div class="download-toolbar">
-            <button type="button" id="download-python">Download Python</button>
+
             <button type="button" id="download-notebook">Download notebook</button>
           </div>
         </section>
@@ -104,17 +111,19 @@
           <details><summary>Run data</summary><div id="chart-data"></div></details>
         </section>
         <section class="practice" aria-labelledby="practice-title">
-          <h3 id="practice-title">Try it</h3>
+          <h2 id="practice-title">Change it and run again</h2>
           <p id="try-it"></p>
           <details id="hint-box"><summary>Show a hint</summary><p id="hint"></p></details>
           <details id="answer-box"><summary>Show the explanation</summary><p id="answer"></p></details>
           <a id="related" hidden></a>
         </section>
+        <details class="resource-row" id="references"><summary><span data-material="menu_book" aria-hidden="true"></span><span><strong>References</strong><small id="reference-topics"></small></span><span class="resource-chevron" aria-hidden="true">›</span></summary><div id="reference-links"></div></details>
         <div class="lesson-footer">
           <label class="complete"><input id="complete" type="checkbox"> Mark lesson complete</label>
+          <p id="completion-note" class="small completion-note">Saved in this browser. Completion is your choice and does not grade your code.</p>
           <nav class="pager" aria-label="Lesson navigation">
-            <a id="previous">Previous</a>
-            <a id="next">Next lesson</a>
+            <a id="previous"><small>Previous lesson</small><strong></strong></a>
+            <a id="next"><small>Next lesson</small><strong></strong></a>
           </nav>
         </div>
       </div>
@@ -126,8 +135,8 @@
   </div>
 
   <footer class="wrap site-footer">
-    <p>PyTorch runs locally in a browser worker using a downstream WebAssembly build. The first run downloads the runtime.</p>
-    <a href="./notices.txt">Runtime sources and licenses</a>
+    <p>PyTorch runs on this device’s CPU. Save the complete course in App status before disconnecting. External links need internet access.</p>
+    <nav aria-label="Further links"><a href="https://snowch.github.io/labs/">All labs</a> · <a href="https://github.com/snowch/pytorch-lab">Source</a> · <a href="./notices.txt">Sources and licences</a></nav>
   </footer>
 </body>
 </html>

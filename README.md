@@ -53,3 +53,11 @@ Python source. If PyTorch is installed locally, use
 `python scripts/check_native.py` to exercise the native paths.
 
 See [third-party notices](THIRD_PARTY.md) for runtime source and license details.
+
+## Shared course controls
+
+The header offers Code runner, App status and theme. PyTorch stays ready between lessons until you free memory or the selected idle timeout expires (30 minutes by default). Code, predictions, results and plots are kept. App status can save and verify the complete course for offline use; normal online page loads still use the published site.
+
+See [course style](docs/course-style.md), [managed runtime](docs/code-runner-design.md) and [offline/update design](docs/offline-update-design.md). Existing lesson URLs and saved-work keys remain stable. Runtime files are pinned to their release, with two prior verified releases retained at publication.
+
+Run `npm run check` for all real WebAssembly examples and notebook parity. Run `npm run test:browser` for the shared controls, offline/recovery and update journeys. `npm run build` generates `dist/`; `npm run dev` serves that generated output.

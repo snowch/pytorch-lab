@@ -1,0 +1,30 @@
+// References belong to the operations taught by the lesson, with a question to guide reading.
+const ref=(title,path,question)=>[title,path,question];
+export const references={
+ tensors:[ref('torch.mean','generated/torch.mean.html','How does dim choose which axis is reduced?')],
+ broadcasting:[ref('Broadcasting semantics','notes/broadcasting.html','Which trailing dimensions must match or have size one?')],
+ views:[ref('Tensor views','tensor_view.html','Which operations share storage, and when does a copy become necessary?')],
+ 'matrix-multiply':[ref('torch.matmul','generated/torch.matmul.html','Which dimensions must agree for the batch and weight matrices?')],
+ autograd:[ref('Autograd basics','notes/autograd.html','Why do repeated backward calls accumulate gradients?')],
+ 'gradient-check':[ref('torch.autograd.gradcheck','generated/torch.autograd.gradcheck.gradcheck.html','How do finite differences and floating-point precision affect a derivative check?')],
+ 'one-training-step':[ref('torch.optim.SGD','generated/torch.optim.SGD.html','How does the learning rate scale a parameter update?')],
+ 'clip-gradients':[ref('clip_grad_norm_','generated/torch.nn.utils.clip_grad_norm_.html','Does clipping constrain individual components or the combined gradient norm?')],
+ 'learning-rate':[ref('torch.optim.SGD','generated/torch.optim.SGD.html','Which update term changes when you change the learning rate?')],
+ modules:[ref('nn.Module','generated/torch.nn.Module.html','How do registered parameters become visible to an optimizer?')],
+ 'classification-loss':[ref('CrossEntropyLoss','generated/torch.nn.CrossEntropyLoss.html','Does the loss expect logits or probabilities, and what shape should targets have?')],
+ 'normalize-data':[ref('torch.std','generated/torch.std.html','Which dimensions and correction define the scale used by preprocessing?')],
+ batches:[ref('DataLoader','data.html#torch.utils.data.DataLoader','What do batch_size and shuffle change about the samples in a batch?')],
+ evaluation:[ref('Module.eval','generated/torch.nn.Module.html#torch.nn.Module.eval','How is evaluation mode different from disabling gradient tracking?'),ref('torch.no_grad','generated/torch.no_grad.html','Which memory cost does disabling gradient tracking avoid?')],
+ checkpoints:[ref('Saving and loading models','notes/serialization.html','Why save a state_dict rather than depend on a whole Python model object?')],
+ 'resume-training':[ref('Optimizer.state_dict','generated/torch.optim.Optimizer.state_dict.html','Which optimizer state must be restored to reproduce the next update?')],
+ convolution:[ref('Conv2d','generated/torch.nn.Conv2d.html','How do kernel size, padding and stride determine output shape?')],
+ 'train-convnet':[ref('Conv2d','generated/torch.nn.Conv2d.html','How many input and output channels does each learned filter connect?')],
+ embeddings:[ref('Embedding','generated/torch.nn.Embedding.html','How does an integer token index select a learned vector?')],
+ softmax:[ref('torch.softmax','generated/torch.softmax.html','Which dimension is normalized so the probabilities sum to one?')],
+ attention:[ref('scaled_dot_product_attention','generated/torch.nn.functional.scaled_dot_product_attention.html','Which positions does a causal mask allow each token to attend to?')],
+ devices:[ref('Tensor.to','generated/torch.Tensor.to.html','When does moving or converting a tensor create a copy?')],
+ benchmark:[ref('PyTorch benchmark utilities','benchmark_utils.html','Why use warmup, repeated measurements and equivalent operations?')],
+ profiler:[ref('PyTorch profiler','profiler.html','Which native operator costs can the profiler measure? This investigation needs native PyTorch.')],
+ 'classifier-project':[ref('nn.Sequential','generated/torch.nn.Sequential.html','How do the layer output shapes determine a valid model sequence?')],
+ 'sequence-project':[ref('CrossEntropyLoss','generated/torch.nn.CrossEntropyLoss.html','How should token logits and next-token targets be reshaped for the loss?'),ref('scaled_dot_product_attention','generated/torch.nn.functional.scaled_dot_product_attention.html','How does the causal mask prevent a token from seeing a future target?')]
+};
