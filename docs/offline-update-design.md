@@ -10,7 +10,7 @@ The reusable design follows the [CUDA Python offline/update contract](https://gi
 - Interrupted download: retain verified files and the previous complete copy; resume without claiming readiness.
 - Missing/corrupt cached files: show repair state rather than claiming the course is ready.
 
-Automatic checks fetch small metadata, not the whole runtime. Browser storage overhead is additional. External documentation needs a connection. Notebooks executed outside this browser require separate Python/PyTorch tools and suitable hardware for CUDA.
+Opening App status forces a fresh metadata check and verifies the saved copy immediately and again after that check settles. Reconnection refreshes the local-copy state after checking the host, so an aborted offline check cannot leave an earlier ready message on screen. These checks fetch small metadata and read the local cache, not the whole runtime. Browser storage overhead is additional. External documentation needs a connection. Notebooks executed outside this browser require separate Python/PyTorch tools and suitable hardware for CUDA.
 
 ## Release and storage boundaries
 
@@ -27,3 +27,7 @@ HTTP 503, unavailable runtime dependencies and startup exceptions are infrastruc
 ## Verification
 
 Run all 26 examples and validate exported notebooks against their Python source. Browser journeys exercise explicit startup followed by Run, implicit startup cancellation, warm reuse between lessons, Stop, idle release, ordinary exceptions, plots and saved work. Save the entire real runtime, disconnect the browser context and open an unvisited lesson in a fresh tab, then execute it. Exercise old-tab first Run after deployment, a two-tab update/restart, blocked saving, interrupted/corrupt downloads and runtime HTTP 503. Check navigation, both themes and phone/desktop sizes. Readiness means all manifest files passed verification, not just that a progress bar reached 100%.
+
+A manual status check sends `STATUS` with `fresh: true`. The worker waits for scans already in progress, forwarding their progress so the request does not time out, then checks the cache again. This prevents a scan that read an early file before eviction from supplying the result of a later manual check. Concurrent checks that begin after the request may still share work. Corruption/reconnect tests use the actual status control and return the tab to the foreground.
+
+While a fresh local check is pending, the dialog says “Checking saved copy” instead of repeating an earlier ready message. A failed verification request invalidates the displayed readiness until a later check succeeds; it does not remove the learner’s saved files or drafts.

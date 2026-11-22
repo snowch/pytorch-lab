@@ -108,7 +108,7 @@ function updateProgress() {
 
 function setBusy(value) {
   busy = value;
-  runButton.disabled = value || starter === undefined;
+  runButton.disabled = value || starter === undefined || ["Starting","Running"].includes(runnerIdentity().state);
   stopButton.hidden = !value;
 }
 
@@ -202,7 +202,7 @@ async function selectLesson(lesson, { focus = false } = {}) {
     get("reset").disabled = false;
     get("download-python").disabled = false;
     get("download-notebook").disabled = false;
-    runButton.disabled = false;
+    setBusy(false);
     status.textContent = "Ready";
     output.textContent = "Run the starter to see its printed output.";
     try{restoreResult(JSON.parse(read(current.id+'/result')));}catch{}
@@ -305,6 +305,7 @@ get("download-notebook").addEventListener("click", async () => {
   }
 });
 
+window.addEventListener('code-runner-state',()=>setBusy(busy));
 window.pytorchApp={busy:()=>busy||runnerBusy()||loading,
  snapshot:()=>({session:[...session],source:starter===undefined?read(current.id+"/source"):source.value,notes:notes.value,result:starter===undefined?null:resultSnapshot(),undoSource}),
  restore(saved){if(!saved)return;for(const[key,value]of saved.session||[])session.set(key,value);if(saved.source!=null)source.value=saved.source;notes.value=saved.notes;if(saved.result)restoreResult(saved.result);undoSource=saved.undoSource;get('undo-reset').hidden=undoSource===undefined;updateProgress();},runnerIdentity};
