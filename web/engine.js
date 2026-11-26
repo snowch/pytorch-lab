@@ -3,7 +3,7 @@ import { customWheels, packages } from "./runtime-config.js";
 
 export async function startRuntime(progress = () => {}, localPath) {
   const indexURL = new URL("./runtime/", import.meta.url);
-  const pyodide = await loadPyodide({ indexURL: localPath ?? indexURL.href });
+  const pyodide = await loadPyodide({ indexURL: localPath ?? indexURL.href, packageBaseUrl: localPath ?? indexURL.href });
   await pyodide.loadPackage(packages, { messageCallback: progress });
   await pyodide.loadPackage(customWheels.map(wheel => localPath ? localPath + wheel : new URL(wheel, indexURL).href), {
     messageCallback: progress,
